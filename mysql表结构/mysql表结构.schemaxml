@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8mb4" collation="utf8mb4_0900_ai_ci">db_blog</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="t_innercomment" view="colnames">
+<left>829</left>
+<top>16</top>
+<width>151</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `t_innercomment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) DEFAULT NULL,
+  `parentCommentId` int(11) DEFAULT NULL,
+  `replyToUserId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `createTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parentCommentId` (`parentCommentId`),
+  KEY `userId` (`userId`),
+  KEY `replyToUserId` (`replyToUserId`),
+  CONSTRAINT `t_innercomment_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `t_user` (`id`),
+  CONSTRAINT `t_innercomment_ibfk_2` FOREIGN KEY (`parentCommentId`) REFERENCES `t_comment` (`id`),
+  CONSTRAINT `t_innercomment_ibfk_4` FOREIGN KEY (`replyToUserId`) REFERENCES `t_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_comment" view="colnames">
+<left>612</left>
+<top>156</top>
+<width>110</width>
+<height>165</height>
+<sql_create_table>CREATE TABLE `t_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) DEFAULT NULL,
+  `blogId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `createTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `blogId` (`blogId`),
+  CONSTRAINT `t_comment_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `t_user` (`id`),
+  CONSTRAINT `t_comment_ibfk_2` FOREIGN KEY (`blogId`) REFERENCES `t_blog` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_user" view="colnames">
+<left>1065</left>
+<top>197</top>
+<width>114</width>
+<height>176</height>
+<sql_create_table>CREATE TABLE `t_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(20) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `nickName` varchar(20) DEFAULT NULL,
+  `imageName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `status` int(11) DEFAULT '1' COMMENT '默认1表示普通用户（非博主），-1表示博主',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userName_UNIQUE` (`userName`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_blog" view="colnames">
+<left>429</left>
+<top>247</top>
+<width>115</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `t_blog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) DEFAULT NULL,
+  `summary` varchar(400) DEFAULT NULL COMMENT '存储博客内容content的摘要',
+  `releaseDate` datetime DEFAULT NULL,
+  `clickNum` int(11) DEFAULT NULL,
+  `replyNum` int(11) DEFAULT NULL,
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_tag" view="colnames">
+<left>76</left>
+<top>227</top>
+<width>92</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `t_tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `orderNo` int(11) DEFAULT NULL COMMENT '数字小优先级高',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_blog_tag" view="colnames">
+<left>238</left>
+<top>221</top>
+<width>125</width>
+<height>167</height>
+<sql_create_table>CREATE TABLE `t_blog_tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blogId` int(11) DEFAULT NULL,
+  `tagId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `blogId` (`blogId`),
+  KEY `tagId` (`tagId`),
+  CONSTRAINT `t_blog_tag_ibfk_1` FOREIGN KEY (`blogId`) REFERENCES `t_blog` (`id`),
+  CONSTRAINT `t_blog_tag_ibfk_2` FOREIGN KEY (`tagId`) REFERENCES `t_tag` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_blogger" view="colnames">
+<left>643</left>
+<top>443</top>
+<width>114</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `t_blogger` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(50) DEFAULT NULL,
+  `nickName` varchar(50) DEFAULT NULL COMMENT '昵称',
+  `sign` varchar(100) DEFAULT NULL COMMENT '签名',
+  `profile` text COMMENT '简介',
+  `imageName` varchar(100) DEFAULT NULL COMMENT '用户头像文件名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+<table name="t_link" view="colnames">
+<left>800</left>
+<top>459</top>
+<width>92</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `t_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL,
+  `orderNo` int(11) DEFAULT NULL COMMENT '显示优先级，数字越小级别越高',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>

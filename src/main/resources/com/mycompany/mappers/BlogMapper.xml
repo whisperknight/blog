@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.dao.BlogDao">
+	<cache />
+
+	<select id="findBlogReleaseDateStrWithblogNum" resultType="Blog">
+		SELECT
+		DATE_FORMAT(
+		releaseDate,
+		'%Y年%m月'
+		) AS releaseDateStr,
+		COUNT(id) AS
+		blogNum
+		FROM
+		t_blog
+		GROUP BY DATE_FORMAT(
+		releaseDate,
+		'%Y年%m月'
+		)
+		ORDER BY
+		COUNT(id)
+	</select>
+
+	<resultMap type="Blog" id="BlogResult">
+		<id property="id" column="id" />
+		<collection property="tags" column="id"
+			select="com.mycompany.dao.BlogDao.findTagListByBlogId"></collection>
+	</resultMap>
+	<select id="findBlogList" resultMap="BlogResult">
+		SELECT t1.id,title,summary,releaseDate,clickNum,replyNum,content,
+		DATE_FORMAT(releaseDate, '%Y年%m月%e日 %H:%i') AS releaseDateStr
+		FROM
+		t_blog t1
+		<choose>
+			<when test="tagId!=null">
+				,t_blog_tag t2
+				<where>t2.tagId=#{tagId} and t1.id=t2.blogId</where>
+			</when>
+			<when test="title!=null">
+				<where>title like CONCAT('%',#{title},'%')</where>
+			</when>
+			<when test="releaseDateStr!=null">
+				<where>
+					DATE_FORMAT(releaseDate,'%Y年%m月')=#{releaseDateStr}
+				</where>
+			</when>
+		</choose>
+		ORDER BY releaseDate DESC
+		<if test="start!=null and size!=null">LIMIT #{start}, #{size}</if>
+	</select>
+
+	<select id="countBlogList" resultType="Long">
+		SELECT
+		COUNT(t1.id)
+		FROM
+		t_blog t1
+		<choose>
+			<when test="tagId!=null">
+				,t_blog_tag t2
+				<where>t2.tagId=#{tagId} and t1.id=t2.blogId</where>
+			</when>
+			<when test="title!=null">
+				<where>title like CONCAT('%',#{title},'%')</where>
+			</when>
+			<when test="releaseDateStr!=null">
+				<where>
+					DATE_FORMAT(releaseDate,'%Y年%m月')=#{releaseDateStr}
+				</where>
+			</when>
+		</choose>
+	</select>
+
+	<select id="findBlogListWithClickNumTop10" resultType="Blog">
+		SELECT
+		id,title
+		FROM
+		t_blog
+		ORDER BY clickNum DESC LIMIT 0,10
+	</select>
+
+	<select id="findBlogById" resultMap="BlogResult">
+		SELECT
+		id,title,releaseDate,clickNum,replyNum,content,
+		DATE_FORMAT(releaseDate, '%Y年%m月%e日 %H:%i') AS releaseDateStr
+		FROM
+		t_blog where id=#{id}
+	</select>
+
+	<update id="update">
+		update t_blog
+		<set>
+			<if test="title!=null">title=#{title},</if>
+			<if test="summary!=null">summary=#{summary},</if>
+			<if test="clickNum!=null">clickNum=#{clickNum},</if>
+			<if test="replyNum!=null">replyNum=#{replyNum},</if>
+			<if test="content!=null">content=#{content}</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="findPreviousBlogById" resultType="Blog">
+		SELECT
+		id,
+		title
+		FROM
+		t_blog
+		WHERE id &lt; #{id}
+		ORDER BY id DESC LIMIT 1
+	</select>
+
+	<select id="findNextBlogById" resultType="Blog">
+		SELECT
+		id,
+		title
+		FROM
+		t_blog
+		WHERE id &gt; #{id}
+		ORDER BY id ASC LIMIT 1
+	</select>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		t_blog
+		values(null,#{title},#{summary},now(),0,0,#{content})
+	</insert>
+	
+	<select id="findTagListByBlogId" resultType="Tag">
+		SELECT
+		t1.id,
+		t1.name,
+		t1.orderNo
+		FROM
+		t_tag t1,
+		t_blog_tag t2
+		WHERE t2.blogId = #{blogId}
+		AND t1.id = t2.tagId
+		ORDER BY t1.orderNo
+	</select>
+
+	<insert id="addTagForBlog">
+		insert into t_blog_tag
+		values(null,#{blogId},#{tagId})
+	</insert>
+
+	<delete id="delete">
+		delete from t_blog where id=#{id}
+	</delete>
+	
+	<delete id="deleteTagOfBlogByBlogId">
+		delete from t_blog_tag where blogId=#{blogId}
+	</delete>
+
+	<delete id="deleteTagOfBlogByTagId">
+		delete from t_blog_tag where tagId=#{tagId}
+	</delete>
+
+</mapper>

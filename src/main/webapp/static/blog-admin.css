@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+body {
+	font-weight: bold;
+}
+
+.btn-add{
+	border: 1px solid #f97777;
+	border-radius: 5px;
+	padding: 4px 8px 4px 8px;
+	background: white;
+}
+
+.btn-add:hover {
+	background: #f97777;
+	color: white;
+}
+
+.btn-tag{
+	font-size:1px;
+	border: 1px solid #f97777;
+	border-radius: 5px;
+	padding: 4px 4px;
+	background: white;
+}
+
+.btn-tag:hover {
+	background: #f97777;
+	color: white;
+}
+
+

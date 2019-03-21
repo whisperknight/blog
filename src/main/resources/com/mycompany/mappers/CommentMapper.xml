@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.dao.CommentDao">
+	<cache />
+
+	<resultMap type="Comment" id="CommentResult">
+		<id property="id" column="id" />
+		<association property="user" column="userId"
+			select="com.mycompany.dao.UserDao.findUserById"></association>
+		<association property="blog" column="blogId"
+			select="com.mycompany.dao.BlogDao.findBlogById"></association>
+	</resultMap>
+	<select id="findCommentList" resultMap="CommentResult">
+		SELECT *, DATE_FORMAT(createTime, '%Y年%m月%e日 %H:%i') AS createTimeStr
+		FROM t_comment
+		<where>
+			<if test="blogId!=null">blogId=#{blogId}</if>
+			<if test="content!=null">and content LIKE CONCAT('%',#{content},'%')</if>
+		</where>
+		ORDER BY createTime DESC
+		<if test="start!=null and size!=null">LIMIT #{start}, #{size}</if>
+	</select>
+	
+	<select id="findCommentIdListByBlogId" resultType="Integer">
+		select id from t_comment where blogId=#{blogId}
+	</select>
+
+	<select id="findCommentIdListByUserId" resultType="Integer">
+		select id from t_comment where userId=#{userId}
+	</select>
+
+	<select id="countCommentList" resultType="Long">
+		SELECT
+		COUNT(id)
+		FROM
+		t_comment
+		<where>
+			<if test="blogId!=null">blogId=#{blogId}</if>
+			<if test="content!=null">and content LIKE CONCAT('%',#{content},'%')</if>
+		</where>
+	</select>
+	
+	<insert id="add">
+		insert into t_comment values(null,#{content},#{blog.id},#{user.id},now())
+	</insert>
+	
+	<select id="findCommentById" resultMap="CommentResult">
+		SELECT *, DATE_FORMAT(createTime, '%Y年%m月%e日 %H:%i') AS createTimeStr
+		FROM t_comment where id=#{id}
+	</select>
+	
+	<delete id="delete">
+		delete from t_comment where id=#{id}
+	</delete>
+
+</mapper>

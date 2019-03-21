@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.dao.InnerCommentDao">
+	<cache />
+
+	<resultMap type="InnerComment" id="InnerCommentResult">
+		<id property="id" column="id" />
+		<association property="user" column="userId"
+			select="com.mycompany.dao.UserDao.findUserById"></association>
+		<association property="replyToUser" column="replyToUserId"
+			select="com.mycompany.dao.UserDao.findUserById"></association>
+		<association property="comment" column="parentCommentId"
+			select="com.mycompany.dao.CommentDao.findCommentById"></association>
+	</resultMap>
+	<select id="findInnerCommentList" resultMap="InnerCommentResult">
+		SELECT *, DATE_FORMAT(createTime, '%Y年%m月%e日 %H:%i') AS createTimeStr
+		FROM t_innercomment
+		<where>
+			<if test="commentId!=null">parentCommentId=#{commentId}</if>
+			<if test="content!=null">and content LIKE CONCAT('%',#{content},'%')</if>
+		</where>
+		ORDER BY
+		createTime DESC
+		<if test="start!=null and size!=null">LIMIT #{start}, #{size}</if>
+	</select>
+
+	<select id="countInnerCommentList" resultType="Long">
+		SELECT
+		COUNT(id)
+		FROM
+		t_innercomment
+		<where>
+			<if test="commentId!=null">parentCommentId=#{commentId}</if>
+			<if test="content!=null">and content LIKE CONCAT('%',#{content},'%')</if>
+		</where>
+	</select>
+
+	<insert id="add">
+		insert into t_innercomment
+		values(null,#{content},#{comment.id},#{replyToUser.id},#{user.id},now())
+	</insert>
+
+	<delete id="delete">
+		delete from t_innercomment where id=#{id}
+	</delete>
+
+	<delete id="deleteByCommentId">
+		delete from t_innercomment where parentCommentId=#{commentId}
+	</delete>
+
+</mapper>

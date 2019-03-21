@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+body {
+	background: #dee0df;
+	font-weight: bold;
+}
+
+.b-head {
+	height: 200px;
+	background: url('image/background-part.png') center center;
+}
+
+.b-head-contain {
+	color: white;
+	text-align: center;
+	margin: 0px;
+	padding-top: 30px;
+}
+
+.b-head-line {
+	width: 400px;
+	height: 3px;
+	background-color: white;
+	margin: auto;
+}
+
+.b-foot {
+	background-color: #06191c;
+}
+
+.b-foot-link {
+	height: 200px;
+	color: #E6E8ED;
+	padding: 30px 300px 0px 300px;
+}
+
+.b-foot-contain {
+	height: 80px;
+	color: #E6E8ED;
+	text-align: center;
+	padding-top: 30px;
+}
+
+.b-foot-link a {
+	color: white;
+}
+
+.b-foot-link a:hover {
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.remove-bootstrap-a-css{
+	color: black;
+}
+.remove-bootstrap-a-css:hover{
+	color: black;
+}
+
+.error-body {
+	height: 400px;
+	padding-top: 150px;
+	background: url('image/girl.png') no-repeat 15% center;
+	background-size: 200px;
+}
+
+.blogList-thumbnail img{
+	margin: 10px;
+	max-height: 220px;
+	max-width: 220px;
+}
+
+.round_icon{
+  height: 40px;
+  width:40px;
+  display: flex;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top:5px;
+}
+
+.round_icon img {
+	height: 40px;
+}
+
+.m-star {
+	color: red;
+	font-size: 20px;
+}
+
