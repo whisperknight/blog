@@ -1,7 +1,7 @@
 <h1 align="center">基于SSM架构的骑士博客项目</h1>
 
 ## 项目描述
-本项目采用Spring5+SpringMVC+Mybatis3经典架构，其中Spring部分实现无xml纯java配置，支持restful风格。采用MySQL作为数据库，使用阿里巴巴的Druid作为数据库连接池，采用本地文件系统作为图片上传后的存储目录。采用Maven做项目管理，使用Shiro安全框架作身份认证和权限认证，采用Lucene作为全文搜索引擎且搜索部分实现代码高亮。前端部分：前台网页使用Bootstrap3 UI框架设计，后台管理页面使用Jquery EasyUI框架内嵌在Bootstrap3框架内的结构实现美观，使用百度的UEditor作为博文发布的在线编辑器并支持图片上传功能，采用Cropper实现头像上传预览和裁切功能。
+本项目采用Spring5+SpringMVC+Mybatis3经典架构，其中Spring部分实现无xml纯java配置，支持restful风格。采用MySQL作为数据库，使用阿里巴巴的Druid作为数据库连接池，采用本地文件系统作为图片上传后的存储目录。采用Maven做项目管理，使用Shiro安全框架作身份认证和权限认证，采用Lucene作为全文搜索引擎且搜索部分实现代码高亮。前端部分：前台网页使用Bootstrap3 UI框架设计，采用Cropper实现头像上传预览和裁切功能；后台管理页面使用Jquery EasyUI框架内嵌在Bootstrap3框架内的结构以实现美观，使用百度的UEditor作为博文发布的在线编辑器并支持图片上传功能。
 
 ## 实现功能
 
