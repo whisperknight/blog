@@ -18,6 +18,7 @@
 </head>
 <body>
 	<jsp:include page="/foreground/common/head.jsp"></jsp:include>
+	<jsp:include page="/foreground/common/nav.jsp"></jsp:include>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
